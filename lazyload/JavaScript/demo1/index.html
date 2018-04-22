@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LazyLoad</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .wrap {
+            height: 100%;
+            width: 100%;
+            /* background-color: grey; */
+        }
+        
+        ul {
+            margin: 0 auto;
+            padding: 20px;
+            list-style: none;
+        }
+        
+        li {
+            display: inline;
+        }
+        
+        img {
+            display: inline-block;
+            width: 400px;
+            height: 300px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrap">
+        <ul>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="8.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="8.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="8.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="8.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="1.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="2.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="3.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="5.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="6.jpg"></li>
+            <li><img src="4.jpg" alt="" class="lazyload" data-src="8.jpg"></li>
+        </ul>
+    </div>
+
+    <!-- <script src="./lazyload.js"></script>
+    <script>
+        var lazyload = new lazyLoadImg({
+            el: document.querySelectorAll('ul'),
+            timeout: 300,
+            beforeHook: function() {},
+            successHook: function() {},
+            errorHook: function() {}
+        })();
+    </script> -->
+    <!-- <script src="/home/simon/git/CDN/jquery/jquery2.1.0.js"></script>
+    <script src="LazyLoad.js"></script> -->
+    <script src="lazy.js"></script>
+    <script>
+        // $.LazyLoad();
+        // LazyLoad({
+        //     timeout: 200,
+        //     errorImg: 'error.png',
+        // });
+        (function() {
+            var lazy = new LazyLoad({
+                timeout: 300,
+                dataSet: 'data-src',
+                className: 'lazyload',
+                errorImg: 'error.png'
+            });
+        })();
+    </script>
+
+</body>
+
+</html>
