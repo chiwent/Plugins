@@ -17,7 +17,12 @@ class FullPage {
             this.pageHeight = document.documentElement.clientHeight || document.body.clientHeight;
             this.currentIndex = 0;
             this.delay = this.options.delay;
+            this.startX = undefined;
             this.startY = undefined;
+            this.endX = undefined;
+            this.endY = undefined;
+            this.nowX = undefined;
+            this.nowY = undefined;
             this.now = 0;
             this.sliderTimer = null;
             this.endTime = 0;
@@ -42,7 +47,11 @@ class FullPage {
         for (var i = 0; i < this.pagesNum; i++) {
             this.pagesEle[i].style.height = this.pageHeight + "px";
         }
-        var _this = this;
+        //var _this = this;
+        this.initMousewheel();
+        this.initTouch();
+    }
+    initMousewheel() {
         if ((navigator.userAgent.toLowerCase().indexOf("firefox") != -1)) {
             document.addEventListener("DOMMouseScroll", this.scrollFn.bind(this), false);
         } else if (document.addEventListener) {
@@ -53,6 +62,21 @@ class FullPage {
             document.onmousewheel = this.scrollFn.bind(this);
         }
     }
+    initTouch() {
+        this.addEventHandler(document, 'touchstart', this.touchStart.bind(this));
+        this.addEventHandler(document, 'touchend', this.touchEnd.bind(this));
+        this.addEventHandler(document, 'touchmove', this.touchMove.bind(this));
+        this.addEventHandler(document, 'touchcancel', this.touchCancel.bind(this));
+    }
+    addEventHandler(oTarget, sEventType, fnHandler) {
+        if (oTarget.addEventListener) {
+            oTarget.addEventListener(sEventType, fnHandler, false);
+        } else if (oTarget.attachEvent) {
+            oTarget.attachEvent("on" + sEventType, fnHandler);
+        } else {
+            oTarget["on" + sEventType] = fnHandler;
+        }
+    };
     scrollFn(e) {
         var startTime = new Date().getTime();
         //var endTime = 0;
@@ -75,10 +99,10 @@ class FullPage {
     }
 
     turnToPage(now, direction) {
-        var _this = this;
-        return new Promise(function(resolve, reject) {
+        // var _this = this;
+        return new Promise((resolve, reject) => {
             if (resolve) {
-                _this.move(now, direction);
+                this.move(now, direction);
                 resolve();
             } else {
 
@@ -88,38 +112,97 @@ class FullPage {
 
     move(now, direction) {
 
-            clearInterval(this.sliderTimer);
-            let _this = this;
-            this.sliderTimer = setInterval(function() {
-                let speed = 0;
-                if (direction === "down") {
-                    if (_this.now < 0 && _this.now < _this.wrapper.offsetTop) {
-                        speed = -10;
-                        _this.wrapper.style.top = _this.wrapper.offsetTop + speed + "px";
-                        if (_this.wrapper.style.top <= _this.now) {
-                            _this.wrapper.style.top = _this.now + "px";
-                            console.log('2:', _this.wrapper.style.top);
-                        }
-                    } else {
-                        _this.wrapper.style.top = _this.now + "px";
-                        speed = 0;
-                        clearInterval(_this.sliderTimer);
+        clearInterval(this.sliderTimer);
+        let _this = this;
+        this.sliderTimer = setInterval(() => {
+            let speed = 0;
+            if (direction === "down") {
+                if (this.now < 0 && this.now < this.wrapper.offsetTop) {
+                    speed = -10;
+                    this.wrapper.style.top = this.wrapper.offsetTop + speed + "px";
+                    if (this.wrapper.style.top <= this.now) {
+                        this.wrapper.style.top = this.now + "px";
+                        console.log('2:', this.wrapper.style.top);
                     }
-                } else if (direction === "up") {
-                    if (_this.now <= 0 && _this.now >= _this.wrapper.offsetTop) {
-                        speed = 10;
-                        _this.wrapper.style.top = _this.wrapper.offsetTop + speed + "px";
-                        if (_this.wrapper.style.top >= _this.now) {
-                            _this.wrapper.style.top = _this.now + "px";
-                        }
-                    } else {
-                        _this.wrapper.style.top = _this.now + "px";
-                        speed = 0;
-                        clearInterval(_this.sliderTimer);
-                    }
+                } else {
+                    this.wrapper.style.top = this.now + "px";
+                    speed = 0;
+                    clearInterval(this.sliderTimer);
                 }
+            } else if (direction === "up") {
+                if (this.now <= 0 && this.now >= this.wrapper.offsetTop) {
+                    speed = 10;
+                    this.wrapper.style.top = this.wrapper.offsetTop + speed + "px";
+                    if (this.wrapper.style.top >= this.now) {
+                        this.wrapper.style.top = this.now + "px";
+                    }
+                } else {
+                    this.wrapper.style.top = this.now + "px";
+                    speed = 0;
+                    clearInterval(this.sliderTimer);
+                }
+            }
 
-            }, 10);
+        }, 10);
+    }
+    judgeSlide() {
+        if (Math.abs(this.endY - this.startY) > 0) {
+            return true;
+        }
+        return false;
+    }
+    slide(e) {
+        e = e || window.event;
+        var startTime = new Date().getTime();
+        //var endTime = 0;
+        if ((this.endTime - startTime) < -this.delay) {
+            if (this.endY < this.startY && parseInt(this.wrapper.offsetTop) > -(this.pageHeight * (this.pagesNum - 1))) {
+                this.now = this.now - this.pageHeight;
+                this.turnToPage(this.now, "down").then(this.callback);
+                this.callback();
+            }
+            if (this.endY > this.startY && parseInt(this.wrapper.offsetTop) < 0) {
+                this.now = this.now + this.pageHeight;
+                this.turnToPage(this.now, "up").then(this.callback);
+                this.callback();
+            }
+            this.endTime = new Date().getTime();
+        } else {
+            e.preventDefault();
+        }
+
+
+        // this.now = this.now - this.pageHeight;
+        // // console.log()
+        // console.log('this.now: ', this.now);
+        // if (this.endY > this.startY) {
+        //     this.turnToPage(this.now, 'up')
+        // } else if (this.endY < this.startY) {
+        //     this.turnToPage(this.now, 'down');
+        // }
+    }
+    touchStart(e) {
+        e = e || widnow.event;
+        this.startX = e.changedTouches[0].pageX;
+        this.startY = e.changedTouches[0].pageY;
+        //e.preventDefault();
+    }
+    touchEnd(e) {
+        e = e || window.event;
+        this.endX = e.changedTouches[0].pageX;
+        this.endY = e.changedTouches[0].pageY;
+        this.judgeSlide() && this.slide(e);
+    }
+    touchMove(e) {
+        e = e || window.event;
+        this.nowX = e.changedTouches[0].pageX;
+        this.nowY = e.changedTouches[0].pageY;
+    }
+    touchCancel(e) {
+            e = e || window.event;
+            this.endX = e.changedTouches[0].pageX;
+            this.endY = e.changedTouches[0].pageY;
+            this.judgeSlide() && this.slide(e);
         }
         /*
         throttle(method, context, delay) {
