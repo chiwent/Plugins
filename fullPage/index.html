@@ -5,57 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
     <title>FullPage</title>
-    <style>
-        html,
-        body {
-            height: 100%;
-        }
-        
-        body,
-        ul,
-        li,
-        a,
-        p,
-        div {
-            padding: 0px;
-            margin: 0px;
-            font-size: 14px;
-        }
-        
-        #wrapper {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        
-        #main {
-            top: 0;
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        
-        .page {
-            width: 100%;
-            margin: 0;
-        }
-        
-        #page1 {
-            background: blue;
-        }
-        
-        #page2 {
-            background: yellow;
-        }
-        
-        #page3 {
-            background: green;
-        }
-        
-        #page4 {
-            background: red;
-        }
     </style>
 </head>
 
@@ -69,6 +20,22 @@
                 <div id="page3" class="page"></div>
                 <div id="page4" class="page"></div>
             </div>
+            <div class="pagenavigation">
+                <ul>
+                    <li id="p1" class="active" index="1">
+                        <span>Page1</span>
+                    </li>
+                    <li id="p2" index="2">
+                        <span>Page2</span>
+                    </li>
+                    <li id="p3" index="3">
+                        <span>Page3</span>
+                    </li>
+                    <li id="p4" index="4">
+                        <span>Page4</span>
+                    </li>
+                </ul>
+            </div>
         </div>
         <script src="./fullpage.js"></script>
         <script>
@@ -76,8 +43,9 @@
                 var fullpage = new FullPage({
                     wrapper: document.querySelector('#wrapper #main'),
                     pagesEle: document.querySelectorAll('.page'),
-                    pagesNum: 4,
-                    delay: 1000,
+                    dots: document.getElementsByClassName('pagenavigation')[0].getElementsByTagName('ul')[0].getElementsByTagName('li'),
+                    delay: 400,
+                    isShowDots: true,
                     callback: () => {
                         console.log('change page');
                     }
